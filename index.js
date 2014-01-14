@@ -1,8 +1,10 @@
 var map = require("map-stream"),
 	consolidate = require("consolidate");
 
-module.exports = function (engine, data) {
+module.exports = function (engine, data, options) {
 	"use strict";
+
+	options = options || {};
 
 	if (!engine) {
 		throw new Error("gulp-consolidate: No template engine supplied");
@@ -33,7 +35,11 @@ module.exports = function (engine, data) {
 
 		if (file.contents instanceof Buffer) {
 			try {
-				consolidate[engine].render(String(file.contents), fileData, render);
+				if (options.useContents) {
+					consolidate[engine].render(String(file.contents), fileData, render);
+				} else {
+					consolidate[engine](file.path, fileData, render);
+				}
 			} catch (err) {
 				callback(err);
 			}
