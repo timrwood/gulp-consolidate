@@ -11,7 +11,11 @@ module.exports = function (engine, data, options) {
 	}
 
 	try {
-		require(engine);
+		if (engine === "hogan") {
+			require("hogan.js");
+		} else {
+			require(engine);
+		}
 	} catch (e) {
 		throw new Error("gulp-consolidate: The template engine \"" + engine + "\" was not found. " +
 			"Did you forget to install it?\n\n    npm install --save-dev " + engine);
