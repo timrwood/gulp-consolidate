@@ -15,7 +15,7 @@ Then, add it to your `gulpfile.js`:
 ```javascript
 var consolidate = require("gulp-consolidate");
 
-gulp.src("./src/*.html")
+gulp.src("./src/*.html", { read : false})
 	.pipe(consolidate("swig", {
 		msg: "Hello Gulp!"
 	}))
@@ -24,7 +24,7 @@ gulp.src("./src/*.html")
 
 ## API
 
-### consolidate(engine, data)
+### consolidate(engine, data[, options])
 
 #### engine
 Type: `String`
@@ -63,6 +63,24 @@ consolidate('swig', function (file) {
 });
 ```
 
+
+#### options
+Type: `Object`
+
+Additional options.
+
+
+#### options.useContents
+Type: `Boolean`
+Default: `false`
+
+```js
+consolidate('swig', data, { useContents : true });
+```
+
+Most times, you will want to render templates that include other files. In order to do so, the filenames will be passed to consolidate rather than the file contents.
+
+If you would rather pass the file contents to consolidate, set the `useContents` option to true.
 
 ## License
 

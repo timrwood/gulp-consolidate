@@ -28,14 +28,14 @@ describe("gulp-consolidate", function () {
 			path: "test/fixtures/hello.txt",
 			cwd: "test/",
 			base: "test/fixtures",
-			contents: new Buffer("Hello {{name}}")
+			contents: new Buffer("Fake data")
 		});
 
 		var expectedFile = new gutil.File({
 			path: "test/expected/hello.txt",
 			cwd: "test/",
 			base: "test/expected",
-			contents: new Buffer("Hello World")
+			contents: new Buffer("Hello World\n")
 		});
 
 		var stream = consolidate("swig", {
@@ -61,17 +61,17 @@ describe("gulp-consolidate", function () {
 
 	it("should use be able to load data from a callback", function (done) {
 		var srcFile = new gutil.File({
-			path: "test/fixtures/hello.txt",
+			path: "test/fixtures/filepath.txt",
 			cwd: "test/",
 			base: "test/fixtures",
-			contents: new Buffer("Hello {{path}}")
+			contents: new Buffer("Fake data")
 		});
 
 		var expectedFile = new gutil.File({
-			path: "test/expected/hello.txt",
+			path: "test/expected/filepath.txt",
 			cwd: "test/",
 			base: "test/expected",
-			contents: new Buffer("Hello test/fixtures/hello.txt")
+			contents: new Buffer("Hello test/fixtures/filepath.txt\n")
 		});
 
 		var stream = consolidate("swig", function (file) {
@@ -79,6 +79,42 @@ describe("gulp-consolidate", function () {
 				path: file.path
 			};
 		});
+
+		stream.on("error", function (err) {
+			assert(err, "errors should throw");
+			done(err);
+		});
+
+		stream.on("data", function (newFile) {
+			assert(newFile, "new file should exist");
+			assert(newFile.contents, "new file contents should exist");
+
+			assert.equal(String(newFile.contents), String(expectedFile.contents), "file contents should match expected contents");
+			done();
+		});
+
+		stream.write(srcFile);
+		stream.end();
+	});
+
+	it("should use be able to render from the file contents", function (done) {
+		var srcFile = new gutil.File({
+			path: "test/fixtures/hello.txt",
+			cwd: "test/",
+			base: "test/fixtures",
+			contents: new Buffer("Fake {{name}}")
+		});
+
+		var expectedFile = new gutil.File({
+			path: "test/expected/hello.txt",
+			cwd: "test/",
+			base: "test/expected",
+			contents: new Buffer("Fake World")
+		});
+
+		var stream = consolidate("swig", {
+			name: "World"
+		}, { useContents : true });
 
 		stream.on("error", function (err) {
 			assert(err, "errors should throw");
