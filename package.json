@@ -1,6 +1,6 @@
 {
   "name": "gulp-consolidate",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Template engine consolidation for gulp",
   "keywords": [
     "gulpplugin"
