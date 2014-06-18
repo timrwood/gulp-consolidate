@@ -133,6 +133,43 @@ describe("gulp-consolidate", function () {
 		stream.end();
 	});
 
+	it("should use be able to render from the file.data property", function (done) {
+		var srcFile = new gutil.File({
+			path: "test/fixtures/hello.txt",
+			cwd: "test/",
+			base: "test/fixtures",
+			contents: new Buffer("Fake {{name}}")
+		});
+
+		// add data to the file object. For testing, we're just setting it here, but in real use, use gulp-data.
+		srcFile.data = {name: 'World'};
+
+		var expectedFile = new gutil.File({
+			path: "test/expected/hello.txt",
+			cwd: "test/",
+			base: "test/expected",
+			contents: new Buffer("Fake World")
+		});
+
+		var stream = consolidate("swig", null, { useContents : true });
+
+		stream.on("error", function (err) {
+			assert(err, "errors should throw");
+			done(err);
+		});
+
+		stream.on("data", function (newFile) {
+			assert(newFile, "new file should exist");
+			assert(newFile.contents, "new file contents should exist");
+
+			assert.equal(String(newFile.contents), String(expectedFile.contents), "file contents should match expected contents");
+			done();
+		});
+
+		stream.write(srcFile);
+		stream.end();
+	});
+
 	it("should error on stream", function (done) {
 		var srcFile = new gutil.File({
 			path: "test/fixtures/hello.txt",
