@@ -37,6 +37,8 @@ module.exports = function (engine, data, options) {
 			fileData = fileData(file);
 		}
 
+		for (var key in options) { fileData[key] = options[key]; }
+		
 		if (file.contents instanceof Buffer) {
 			try {
 				if (options.useContents) {
