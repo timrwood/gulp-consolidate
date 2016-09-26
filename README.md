@@ -1,3 +1,7 @@
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+If you are using this plugin, and would like to take over ownership, please open an issue.
+
 # [gulp][gulp-url]-consolidate [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
 
 > Template engine consolidation for [gulp][gulp-url] using [consolidate.js][consolidate-url].
